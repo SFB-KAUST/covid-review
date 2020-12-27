@@ -6,8 +6,12 @@ Order to run this project:
 - 2.Feature_selection.ipynb
 - 3.Visualize_graph.ipynb
 - 4.Deep_Learning.ipynb
-- 5.Graphsage_classification.ipynb
 
 Input files:
 - data/compdata_cit_authmet.csv
 - data/compdata_ref_author.csv
+
+Input files to tune DL params:
+- data/lda_doc2vec_feats.csv
+- data/lda_doc2vec_targs.csv
+- data/graph_embedding.csv
