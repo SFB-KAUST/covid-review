@@ -15,3 +15,8 @@ Input files to tune DL params:
 - data/lda_doc2vec_feats.csv
 - data/lda_doc2vec_targs.csv
 - data/graph_embedding.csv
+
+Install dependencies using command:
+```
+pip install -r requirements.txt
+```
