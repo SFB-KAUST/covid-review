@@ -4,7 +4,7 @@ from sklearn.model_selection import train_test_split
 from utils import load_data, dl_modeling
 
 
-def tune_2layer(papers, save_path, layer1, layer2, epochs=10):
+def tune_2layer(X_train, X_test, y_train, y_test,feature_set, save_path, layer1, layer2, epochs=10):
     """
         Two layer params tuning
     :param papers: pandas dataframe. Input training data
@@ -14,17 +14,6 @@ def tune_2layer(papers, save_path, layer1, layer2, epochs=10):
     :param epochs: int. Tensorflow epochs, default 10
     :return: No return value
     """
-    X = papers
-    y = papers.targ
-
-    em_size = 50
-    F_Doc2Vec = ['dv ' + str(i + 1) for i in range(em_size)]
-    F_DeepWalk = ['dw ' + str(i + 1) for i in range(em_size)]
-    feature_set = {"Doc2Vec": F_Doc2Vec,
-                   "DeepWalk": F_DeepWalk,
-                   "Doc2Vec+DeepWalk": F_Doc2Vec + F_DeepWalk}
-
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=123)
 
     for feature in feature_set.keys():
         print(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')
@@ -43,9 +32,9 @@ def tune_2layer(papers, save_path, layer1, layer2, epochs=10):
         print(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f') + ' 2 layer tuning finished!')
 
 
-def tune_3layer(papers, save_path, layer1, layer2, layer3, epochs=10):
+def tune_3layer(X_train, X_test, y_train, y_test, feature_set, save_path, layer1, layer2, layer3, epochs=10):
     """
-        Two layer params tuning
+        3 layer params tuning
     :param papers: pandas dataframe. Input training data
     :param save_path: str. Path to save tuning results
     :param layer1: list. Number of nodes in the 1st layer
@@ -54,17 +43,6 @@ def tune_3layer(papers, save_path, layer1, layer2, layer3, epochs=10):
     :param epochs: int. Tensorflow epochs, default 10
     :return: No return value
     """
-    X = papers
-    y = papers.targ
-
-    em_size = 50
-    F_Doc2Vec = ['dv ' + str(i + 1) for i in range(em_size)]
-    F_DeepWalk = ['dw ' + str(i + 1) for i in range(em_size)]
-    feature_set = {"Doc2Vec": F_Doc2Vec,
-                   "DeepWalk": F_DeepWalk,
-                   "Doc2Vec+DeepWalk": F_Doc2Vec + F_DeepWalk}
-
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=123)
 
     for feature in feature_set.keys():
         print(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')
@@ -84,9 +62,9 @@ def tune_3layer(papers, save_path, layer1, layer2, layer3, epochs=10):
         print(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f') + ' 3 layer tuning finished!')
 
 
-def tune_4layer(papers, save_path, layer1, layer2, layer3, layer4, epochs=10):
+def tune_4layer(X_train, X_test, y_train, y_test, feature_set, save_path, layer1, layer2, layer3, layer4, epochs=10):
     """
-        Two layer params tuning
+        4 layer params tuning
     :param papers: pandas dataframe. Input training data
     :param save_path: str. Path to save tuning results
     :param layer1: list. Number of nodes in the 1st layer
@@ -96,17 +74,6 @@ def tune_4layer(papers, save_path, layer1, layer2, layer3, layer4, epochs=10):
     :param epochs: int. Tensorflow epochs, default 10
     :return: No return value
     """
-    X = papers
-    y = papers.targ
-
-    em_size = 50
-    F_Doc2Vec = ['dv ' + str(i + 1) for i in range(em_size)]
-    F_DeepWalk = ['dw ' + str(i + 1) for i in range(em_size)]
-    feature_set = {"Doc2Vec": F_Doc2Vec,
-                   "DeepWalk": F_DeepWalk,
-                   "Doc2Vec+DeepWalk": F_Doc2Vec + F_DeepWalk}
-
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=123)
 
     for feature in feature_set.keys():
         print(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')
@@ -134,19 +101,32 @@ def main(args):
         layer1 = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140]
         layer2 = [10, 20, 30, 40, 50, 60, 70, 80]
         layer3 = [10, 20, 30, 40, 50]
-        layer4 = [10, 20]
+        layer4 = [10, 20, 30]
 
     inoutpath = args.folder_path
-    compdata_path = inoutpath + 'features.ori_doc2vec_deepwalk_train.csv'
+    compdata_path = inoutpath + 'features.ori_doc2vec_deepwalk_scores_train.csv'
 
-    papers = load_data(compdata_path)
+    X = load_data(compdata_path)
+    y = X.is_published
 
+    em_size = 50
+    F_Doc2Vec = ['dv ' + str(i + 1) for i in range(em_size)]
+    F_DeepWalk = ['dw ' + str(i + 1) for i in range(em_size)]
+    F_ascore = ['auth.papers.score', 'auth.citations.score', 'art.citations.score', 'art.views.score', 'final.score']
+    
+    feature_set = {"Doc2Vec": F_Doc2Vec,
+                   "DeepWalk": F_DeepWalk,
+                   "Ascore": F_ascore,
+                   "Doc2Vec+DeepWalk+AScore": F_Doc2Vec + F_DeepWalk + F_ascore}
+    
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=123)
+    
     if args.hidden_layer_num == 2:
-        tune_2layer(papers, inoutpath, layer1, layer2, epochs=args.epochs)
+        tune_2layer(X_train, X_test, y_train, y_test, feature_set, inoutpath, layer1, layer2, epochs=args.epochs)
     elif args.hidden_layer_num == 3:
-        tune_3layer(papers, inoutpath, layer1, layer2, layer3, epochs=args.epochs)
+        tune_3layer(X_train, X_test, y_train, y_test, feature_set, inoutpath, layer1, layer2, layer3, epochs=args.epochs)
     elif args.hidden_layer_num == 4:
-        tune_4layer(papers, inoutpath, layer1, layer2, layer3, layer4, epochs=args.epochs)
+        tune_4layer(X_train, X_test, y_train, y_test, feature_set, inoutpath, layer1, layer2, layer3, layer4, epochs=args.epochs)
 
     return
 
