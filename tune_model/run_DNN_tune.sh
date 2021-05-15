@@ -1,6 +1,6 @@
 # Deep learning model tuning
 folder_path='/home/xiaopengxu/Desktop/data-covid-review/2021-05-11/'
-test=0 # 1 for test run, 0 or others for actually tuning
+test=0 # 1 for test run, 0 for actually tuning
 epochs_list="5 10"
 echo $epochs_list
 
