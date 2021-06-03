@@ -1,7 +1,7 @@
 # Deep learning model tuning
-folder_path='/home/xiaopengxu/Desktop/data-covid-review/2021-05-11/'
+folder_path='/home/xiaopengxu/Desktop/data-covid-review/2021-05-31/'
 test=0 # 1 for test run, 0 for actually tuning
-epochs_list="5 10"
+epochs_list="5"
 echo $epochs_list
 
 now=$(date +"%T")
