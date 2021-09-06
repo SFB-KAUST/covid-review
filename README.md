@@ -14,7 +14,10 @@ The code includes two parts:
 ## Machine Learning models
 
 ML models will use data from R scripts to provide an additional score for preprint papers.
-
+Install dependencies:
+```shell
+pip install -r requirements.txt
+```
 Order to run scripts:
 - 0.LDA_topics.ipynb: evaluate topic numbers of LDA models.
 - 1.Doc2vec_embedding.ipynb: retrieve doc2vec embeddings.
@@ -23,7 +26,3 @@ Order to run scripts:
 - 4.Deep_Learning.ipynb: train DL models and predict probability.
 - 5.Visualize_graph.ipynb: get citation edges, node degrees and topic for citation graph visualizaiton.
 
-Install dependencies:
-```shell
-pip install -r requirements.txt
-```
